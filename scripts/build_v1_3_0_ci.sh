@@ -40,6 +40,7 @@ build_args=(
     -configuration Release -destination 'platform=macOS,arch=arm64'
     -derivedDataPath "$derived_data"
     MACOSX_DEPLOYMENT_TARGET=13.0 ARCHS=arm64 ONLY_ACTIVE_ARCH=YES
+    BUILD_VARIANTS=normal
     MARKETING_VERSION=1.8-pr1834-test CURRENT_PROJECT_VERSION=1834
     CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= CODE_SIGN_IDENTITY=-
     CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES
@@ -61,13 +62,16 @@ codesign --force --sign - --timestamp=none \
     --preserve-metadata=entitlements,flags "$helper"
 codesign --force --sign - --timestamp=none \
     --preserve-metadata=identifier,entitlements,flags "$app"
+# Retain the candidate if a later verification fails, so diagnostics include
+# the actual app instead of requiring another full compilation to inspect it.
+ditto -c -k --sequesterRsrc --keepParent "$app" "$output_dir/AltServer-v1.3.0-arm64-candidate.zip"
 codesign --verify --deep --strict --verbose=2 "$app"
-lipo -verify_arch arm64 "$app/Contents/MacOS/AltServer"
+lipo "$app/Contents/MacOS/AltServer" -verify_arch arm64
 otool -L "$app/Contents/MacOS/AltServer" > "$output_dir/dependencies.txt"
 nm "$app/Contents/MacOS/AltServer" > "$output_dir/symbols.txt"
 grep -q 'alt_ccsrp_' "$output_dir/symbols.txt"
 rm "$output_dir/symbols.txt"
 shasum -a 256 "$app/Contents/MacOS/AltServer" | awk '{print $1 "  AltServer.app/Contents/MacOS/AltServer"}' > "$output_dir/executable-sha256.txt"
-ditto -c -k --sequesterRsrc --keepParent "$app" "$output_dir/AltServer-v1.3.0-arm64.zip"
+mv "$output_dir/AltServer-v1.3.0-arm64-candidate.zip" "$output_dir/AltServer-v1.3.0-arm64.zip"
 cd "$output_dir"
 shasum -a 256 AltServer-v1.3.0-arm64.zip > SHA256SUMS.txt
