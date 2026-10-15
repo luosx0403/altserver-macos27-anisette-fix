@@ -34,14 +34,21 @@ PY
     xcodebuild -version
 } > "$output_dir/build-info.txt"
 
-xcodebuild -workspace AltStore.xcworkspace -scheme AltServer \
-    -configuration Release -destination 'platform=macOS,arch=arm64' \
-    -derivedDataPath "$derived_data" \
-    MACOSX_DEPLOYMENT_TARGET=13.0 ARCHS=arm64 ONLY_ACTIVE_ARCH=YES \
-    MARKETING_VERSION=1.8-pr1834-test CURRENT_PROJECT_VERSION=1834 \
-    CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= CODE_SIGN_IDENTITY=- \
-    CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES \
-    ENABLE_USER_SCRIPT_SANDBOXING=NO build 2>&1 | tee "$output_dir/build.log"
+plutil -lint AltStore.xcodeproj/project.pbxproj
+build_args=(
+    -workspace AltStore.xcworkspace -scheme AltServer
+    -configuration Release -destination 'platform=macOS,arch=arm64'
+    -derivedDataPath "$derived_data"
+    MACOSX_DEPLOYMENT_TARGET=13.0 ARCHS=arm64 ONLY_ACTIVE_ARCH=YES
+    MARKETING_VERSION=1.8-pr1834-test CURRENT_PROJECT_VERSION=1834
+    CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= CODE_SIGN_IDENTITY=-
+    CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES
+    ENABLE_USER_SCRIPT_SANDBOXING=NO
+)
+# Validate the dependency graph before compiling; this detects duplicate
+# ProcessXCFramework producers, which caused the first CI build to fail.
+xcodebuild "${build_args[@]}" -dry-run build 2>&1 | tee "$output_dir/build-plan.log"
+xcodebuild "${build_args[@]}" build 2>&1 | tee "$output_dir/build.log"
 
 app="$derived_data/Build/Products/Release/AltServer.app"
 test -x "$app/Contents/MacOS/AltServer"

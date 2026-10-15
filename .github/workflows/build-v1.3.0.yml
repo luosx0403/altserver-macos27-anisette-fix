@@ -7,6 +7,7 @@ on:
     paths:
       - .github/workflows/build-v1.3.0.yml
       - scripts/build_v1_3_0_ci.sh
+      - compatibility/v1.3.0/patches/**
 
 permissions:
   contents: read
@@ -15,6 +16,8 @@ jobs:
   build:
     runs-on: macos-26
     timeout-minutes: 60
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
     steps:
       - name: Checkout build recipes
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262

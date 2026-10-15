@@ -1,0 +1,44 @@
+diff --git a/AltStore.xcodeproj/project.pbxproj b/AltStore.xcodeproj/project.pbxproj
+--- a/AltStore.xcodeproj/project.pbxproj
++++ b/AltStore.xcodeproj/project.pbxproj
+@@ -28,8 +28,6 @@
+ 		BF088D0F25019ABA008082D9 /* AltSign-Static in Frameworks */ = {isa = PBXBuildFile; productRef = BF088D0E25019ABA008082D9 /* AltSign-Static */; };
+ 		BF088D332501A4FF008082D9 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF088D322501A4FF008082D9 /* OpenSSL.xcframework */; };
+ 		BF088D342501A4FF008082D9 /* OpenSSL.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BF088D322501A4FF008082D9 /* OpenSSL.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+-		BF088D382501A833008082D9 /* OpenSSL.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF088D322501A4FF008082D9 /* OpenSSL.xcframework */; };
+-		BF088D392501A833008082D9 /* OpenSSL.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = BF088D322501A4FF008082D9 /* OpenSSL.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+ 		BF0C4EBD22A1BD8B009A2DD7 /* AppManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0C4EBC22A1BD8B009A2DD7 /* AppManager.swift */; };
+ 		BF0DCA662433BDF500E3A595 /* AnalyticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0DCA652433BDF500E3A595 /* AnalyticsManager.swift */; };
+ 		BF10EB34248730750055E6DB /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF10EB33248730750055E6DB /* main.swift */; };
+@@ -387,7 +385,6 @@
+ 		D533E8BE2727BBF800A9B5DD /* libcurl.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D533E8BD2727BBF800A9B5DD /* libcurl.a */; };
+ 		D535CEE82BE95D4C00F96119 /* TelemetryClient in Frameworks */ = {isa = PBXBuildFile; productRef = D535CEE72BE95D4C00F96119 /* TelemetryClient */; };
+ 		D537C8592AA94D94009A1E08 /* altjit in Embed AltJIT */ = {isa = PBXBuildFile; fileRef = D5FB7A132AA284BE00EF863D /* altjit */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+-		D537C85B2AA9507A009A1E08 /* libcorecrypto.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = D537C85A2AA95066009A1E08 /* libcorecrypto.tbd */; platformFilters = (macos, ); };
+ 		D5390C3C2AC3A43900D17E62 /* AddSourceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5390C3B2AC3A43900D17E62 /* AddSourceViewController.swift */; };
+ 		D5399FAE2BE56B030038DDEF /* JoinPatreonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5399FAD2BE56B030038DDEF /* JoinPatreonViewController.swift */; };
+ 		D5399FB02BE56B120038DDEF /* JoinPatreonViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5399FAF2BE56B120038DDEF /* JoinPatreonViewController.xib */; };
+@@ -761,7 +758,6 @@
+ 			dstPath = "";
+ 			dstSubfolderSpec = 10;
+ 			files = (
+-				BF088D392501A833008082D9 /* OpenSSL.xcframework in Embed Frameworks */,
+ 			);
+ 			name = "Embed Frameworks";
+ 			runOnlyForDeploymentPostprocessing = 0;
+@@ -1376,7 +1372,6 @@
+ 				D53FB4C2305372FB000546E8 /* libcorecrypto_static.a in Frameworks */,
+ 				823E33CB3059B78900EBB2DE /* AnisetteKit in Frameworks */,
+ 				D58D5F2E26DFE68E00E55E38 /* LaunchAtLogin in Frameworks */,
+-				BF088D382501A833008082D9 /* OpenSSL.xcframework in Frameworks */,
+ 				BF4588882298DD3F00BD7491 /* libxml2.tbd in Frameworks */,
+ 				BF4588472298D4B000BD7491 /* libimobiledevice.a in Frameworks */,
+ 				CA1DE71000000000000005A2 /* IDevice in Frameworks */,
+@@ -1451,7 +1446,6 @@
+ 			files = (
+ 				D53FB4C530537307000546E8 /* libcorecrypto_static.a in Frameworks */,
+ 				D53FB4C430537302000546E8 /* AltSign-Static in Frameworks */,
+-				D537C85B2AA9507A009A1E08 /* libcorecrypto.tbd in Frameworks */,
+ 				D5FB7A2E2AA2859400EF863D /* ArgumentParser in Frameworks */,
+ 			);
+ 			runOnlyForDeploymentPostprocessing = 0;
