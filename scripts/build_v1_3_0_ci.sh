@@ -53,6 +53,14 @@ xcodebuild "${build_args[@]}" build 2>&1 | tee "$output_dir/build.log"
 app="$derived_data/Build/Products/Release/AltServer.app"
 test -x "$app/Contents/MacOS/AltServer"
 test -d "$app/Contents/Frameworks/OpenSSL.framework"
+# LaunchAtLogin's copy script changes the helper's Info.plist after its original
+# signature was made. Seal that final bundle first, then seal the containing app.
+helper="$app/Contents/Library/LoginItems/LaunchAtLoginHelper.app"
+test -d "$helper"
+codesign --force --sign - --timestamp=none \
+    --preserve-metadata=entitlements,flags "$helper"
+codesign --force --sign - --timestamp=none \
+    --preserve-metadata=identifier,entitlements,flags "$app"
 codesign --verify --deep --strict --verbose=2 "$app"
 lipo -verify_arch arm64 "$app/Contents/MacOS/AltServer"
 otool -L "$app/Contents/MacOS/AltServer" > "$output_dir/dependencies.txt"
