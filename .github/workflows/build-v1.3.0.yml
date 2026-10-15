@@ -1,0 +1,42 @@
+name: Build AltServer v1.3.0 (arm64)
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [build/v1.3.0-github-hosted]
+    paths:
+      - .github/workflows/build-v1.3.0.yml
+      - scripts/build_v1_3_0_ci.sh
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - name: Checkout build recipes
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          path: recipe
+          persist-credentials: false
+      - name: Checkout pinned AltStore and dependencies
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          repository: altstoreio/AltStore
+          ref: ddb4415cc6aeeb3145de33a29f7064292a45d895
+          submodules: recursive
+          path: AltStore
+          persist-credentials: false
+      - name: Build, sign and verify
+        shell: bash
+        run: bash recipe/scripts/build_v1_3_0_ci.sh "$GITHUB_WORKSPACE/AltStore" "$RUNNER_TEMP/AltStoreDerivedData" "$GITHUB_WORKSPACE/artifacts"
+      - name: Upload build and diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: AltServer-v1.3.0-arm64
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 1
