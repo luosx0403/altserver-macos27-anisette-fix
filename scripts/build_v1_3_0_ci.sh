@@ -44,6 +44,9 @@ build_args=(
     CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= CODE_SIGN_IDENTITY=-
     CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES
     ENABLE_USER_SCRIPT_SANDBOXING=NO
+    # LLVM's new negation diagnostic conflicts with upstream corecrypto's
+    # -Werror=conversion; its signed 4-bit windows remain within int8_t.
+    'OTHER_CFLAGS=$(inherited) -Wno-error=implicit-int-conversion-on-negation'
 )
 xcodebuild "${build_args[@]}" build 2>&1 | tee "$output_dir/build.log"
 
