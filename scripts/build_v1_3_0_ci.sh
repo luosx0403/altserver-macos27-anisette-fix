@@ -45,9 +45,6 @@ build_args=(
     CODE_SIGNING_ALLOWED=YES CODE_SIGNING_REQUIRED=YES
     ENABLE_USER_SCRIPT_SANDBOXING=NO
 )
-# Validate the dependency graph before compiling; this detects duplicate
-# ProcessXCFramework producers, which caused the first CI build to fail.
-xcodebuild "${build_args[@]}" -dry-run build 2>&1 | tee "$output_dir/build-plan.log"
 xcodebuild "${build_args[@]}" build 2>&1 | tee "$output_dir/build.log"
 
 app="$derived_data/Build/Products/Release/AltServer.app"
