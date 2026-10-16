@@ -54,14 +54,7 @@ xcodebuild "${build_args[@]}" build 2>&1 | tee "$output_dir/build.log"
 app="$derived_data/Build/Products/Release/AltServer.app"
 test -x "$app/Contents/MacOS/AltServer"
 test -d "$app/Contents/Frameworks/OpenSSL.framework"
-# LaunchAtLogin's copy script changes the helper's Info.plist after its original
-# signature was made. Seal that final bundle first, then seal the containing app.
-helper="$app/Contents/Library/LoginItems/LaunchAtLoginHelper.app"
-test -d "$helper"
-codesign --force --sign - --timestamp=none \
-    --preserve-metadata=entitlements,flags "$helper"
-codesign --force --sign - --timestamp=none \
-    --preserve-metadata=identifier,entitlements,flags "$app"
+python3 "$recipe_root/scripts/sign_v1_3_0_candidate.py" "$app" "$output_dir"
 # Retain the candidate if a later verification fails, so diagnostics include
 # the actual app instead of requiring another full compilation to inspect it.
 ditto -c -k --sequesterRsrc --keepParent "$app" "$output_dir/AltServer-v1.3.0-arm64-candidate.zip"
@@ -71,6 +64,7 @@ otool -L "$app/Contents/MacOS/AltServer" > "$output_dir/dependencies.txt"
 nm "$app/Contents/MacOS/AltServer" > "$output_dir/symbols.txt"
 grep -q 'alt_ccsrp_' "$output_dir/symbols.txt"
 rm "$output_dir/symbols.txt"
+bash "$recipe_root/scripts/smoke_v1_3_0_candidate.sh" "$app" "$output_dir"
 shasum -a 256 "$app/Contents/MacOS/AltServer" | awk '{print $1 "  AltServer.app/Contents/MacOS/AltServer"}' > "$output_dir/executable-sha256.txt"
 mv "$output_dir/AltServer-v1.3.0-arm64-candidate.zip" "$output_dir/AltServer-v1.3.0-arm64.zip"
 cd "$output_dir"

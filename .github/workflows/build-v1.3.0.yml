@@ -7,6 +7,8 @@ on:
     paths:
       - .github/workflows/build-v1.3.0.yml
       - scripts/build_v1_3_0_ci.sh
+      - scripts/sign_v1_3_0_candidate.py
+      - scripts/smoke_v1_3_0_candidate.sh
       - compatibility/v1.3.0/patches/**
 
 permissions:
